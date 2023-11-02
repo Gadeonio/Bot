@@ -72,17 +72,28 @@ class BaseReservation:
     def add_reservation(self, start_time: str, end_time="", duration="", room=None):
         if end_time == "" and duration == "":
             print("Введите время окончания или длительность")
-            return
+            return False
+        if not check_format_time_with_datetime(start_time):
+            print("Неверно введено время начала")
+            return False
+        if end_time == "":
+            if not check_format_time_with_datetime(duration):
+                print("Неверно введена продолжительность")
+                return False
+        else:
+            if not check_format_time_with_datetime(end_time):
+                print("Неверно введено время окончания")
+                return False
         if room is None:
             if end_time == "":
-                self.add_reservation_duration(start_time, duration)
+                return self.add_reservation_duration(start_time, duration)
             else:
-                self.add_reservation_times(start_time, end_time)
+                return self.add_reservation_times(start_time, end_time)
         else:
             if end_time == "":
-                self.add_reservation_duration_with_room(start_time, duration, room)
+                return self.add_reservation_duration_with_room(start_time, duration, room)
             else:
-                self.add_reservation_times_with_room(start_time, end_time, room)
+                return self.add_reservation_times_with_room(start_time, end_time, room)
 
     def get_spare_room_times(self, start_time, end_time):
         for room_time_list in self.rooms_time_list:
@@ -102,10 +113,12 @@ class BaseReservation:
         print("Запись по окончанию времени")
         room_time_list = self.get_spare_room_times(start_time, end_time)
         if room_time_list is not None:
-            room_time_list.time_list.append((start_time, end_time))
+            room_time_list.time_list.append([start_time, end_time])
             print(f"Забронирована комната {room_time_list.room} с {start_time}, {end_time}")
+            return True
         else:
             print("Отсутствует возможность брони, все комнаты заняты")
+            return False
 
     def add_reservation_duration(self, start_time: str, duration: str):
         print("Запись по длительности")
@@ -152,6 +165,6 @@ class BaseReservation:
     reservation.add_reservation("00:00:00", end_time="23:59:59")
 
     print(reservation)
-    reservation.read_in_json_file()
+    
     print("\n")
     print(reservation)'''

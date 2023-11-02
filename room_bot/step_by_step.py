@@ -23,6 +23,12 @@ async def caps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
 
 
+async def reservation_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(context)
+    print(context.args)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="Moment please")
+
+
 async def inline_caps(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.inline_query.query
     if not query:
@@ -42,6 +48,7 @@ async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 if __name__ == '__main__':
+
     application = ApplicationBuilder().token(model.my_token.get_token()).build()
 
     start_handler = CommandHandler('start', start)
@@ -58,7 +65,9 @@ if __name__ == '__main__':
     application.add_handler(echo_handler)
     application.add_handler(caps_handler)
     application.add_handler(inline_caps_handler)
+
     application.add_handler(unknown_handler)
+
 
     application.run_polling()
 

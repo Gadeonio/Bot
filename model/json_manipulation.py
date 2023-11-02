@@ -1,16 +1,19 @@
 import json
+from pathlib import Path
 
 
 def read_json_file(name: str, cls=None):
-    data = None
-    with open(f'{name}.txt') as file:
-        data = json.load(file)
-        print(data)
-    return data
+    info = None
+    path = Path(Path.cwd().parent, "model", name)
+    with open(str(path)) as file:
+        info = json.load(file)
+        print(info)
+    return info
 
 
 def create_json_file(name: str, data, cls=None):
-    with open(f'{name}.txt', 'w') as file:
+    path = Path(Path.cwd().parent, "model", name)
+    with open(str(path), 'w') as file:
         json.dump(data, file, ensure_ascii=False, indent=2, cls=cls)
 
 
